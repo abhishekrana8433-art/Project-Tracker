@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project Tracker Dashboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .stat-card h2 {
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            height: 100%;
+            transition: transform 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+        }
+
+        .filter-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .project-date {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .priority-high {
+            background-color: #dc3545;
+        }
+
+        .priority-medium {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .priority-low {
+            background-color: #198754;
+        }
+
+        .overdue {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white mb-4">
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="#">
+            📋 Project Tracker
+        </a>
+
+        <div class="d-flex align-items-center gap-3">
+
+            <span id="welcomeUser">
+                Welcome
+            </span>
+            <button
+    type="button"
+    class="btn btn-outline-light me-2"
+    onclick="openProfileModal()">
+    👤 Profile
+</button>
+
+            <button
+                class="btn btn-danger"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container">
+
+    <!-- Dashboard Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>Dashboard</h1>
+
+            <p class="text-muted">
+                Manage and track your projects
+            </p>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="openAddProjectModal()"
+        >
+            + Add Project
+        </button>
+        <a href="tasks.html" class="btn btn-success">
+    <i class="bi bi-check2-square"></i>
+    Task Management
+</a>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <p class="text-muted mb-2">
+                    Total Projects
+                </p>
+
+                <h2 id="totalProjects">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <p class="text-muted mb-2">
+                    Active Projects
+                </p>
+
+                <h2 id="activeProjects">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <p class="text-muted mb-2">
+                    Completed Projects
+                </p>
+
+                <h2 id="completedProjects">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =============================== -->
+<!-- TASK ANALYTICS -->
+<!-- =============================== -->
+
+<div class="row g-4 mb-5">
+
+    <!-- Total Tasks -->
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <p class="text-muted mb-2">
+                Total Tasks
+            </p>
+
+            <h2 id="dashboardTotalTasks">
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- Completed Tasks -->
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <p class="text-muted mb-2">
+                Completed Tasks
+            </p>
+
+            <h2 id="dashboardCompletedTasks">
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pending Tasks -->
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <p class="text-muted mb-2">
+                Pending Tasks
+            </p>
+
+            <h2 id="dashboardPendingTasks">
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- Task Completion -->
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <p class="text-muted mb-2">
+                Task Completion
+            </p>
+
+            <h2 id="dashboardTaskCompletion">
+                0%
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <!-- Search & Filters -->
+
+    <div class="filter-box mb-4">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <label class="form-label">
+                    Search Projects
+                </label>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="form-control"
+                    placeholder="Search by project name or description..."
+                >
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <label class="form-label">
+                    Status
+                </label>
+
+                <select
+                    id="statusFilter"
+                    class="form-select"
+                >
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <label class="form-label">
+                    Priority
+                </label>
+
+                <select
+                    id="priorityFilter"
+                    class="form-select"
+                >
+
+                    <option value="">
+                        All Priority
+                    </option>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                </select>
+
+            </div>
+            <div class="col-md-3">
+
+    <label class="form-label">
+        Sort Projects
+    </label>
+
+    <select
+        id="sortFilter"
+        class="form-select"
+    >
+
+        <option value="">
+            Default
+        </option>
+
+        <option value="name-asc">
+            Name A → Z
+        </option>
+
+        <option value="name-desc">
+            Name Z → A
+        </option>
+
+        <option value="deadline-asc">
+            Deadline: Earliest
+        </option>
+
+        <option value="deadline-desc">
+            Deadline: Latest
+        </option>
+
+        <option value="progress-asc">
+            Progress: Low → High
+        </option>
+
+        <option value="progress-desc">
+            Progress: High → Low
+        </option>
+
+        <option value="priority">
+            Priority: High → Low
+        </option>
+
+    </select>
+
+</div>
+
+
+            <div class="col-md-2 d-flex align-items-end">
+
+                <button
+                    class="btn btn-secondary w-100"
+                    onclick="clearFilters()"
+                    title="Clear filters"
+                >
+                    ✕
+                </button>
+                <div class="col-md-2">
+    <label class="form-label d-block">&nbsp;</label>
+
+    <button
+        type="button"
+        class="btn btn-success w-100"
+        onclick="exportProjectsCSV()">
+        📥 Export CSV
+    </button>
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Projects -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h3>
+            My Projects
+        </h3>
+
+        <span
+            id="projectCount"
+            class="text-muted"
+        >
+            0 projects
+        </span>
+
+    </div>
+
+
+    <div
+        id="projectContainer"
+        class="row"
+    ></div>
+    <!-- DEADLINE ALERTS -->
+<div class="row mt-4 mb-4">
+    <div class="col-12">
+        <div id="deadlineAlerts"></div>
+    </div>
+</div>
+<!-- PROJECT CALENDAR -->
+<div class="row mb-5">
+    <div class="col-12">
+
+        <div class="stat-card">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+                <h4 class="mb-0">📅 Project Calendar</h4>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        onclick="changeCalendarMonth(-1)">
+                        ❮
+                    </button>
+
+                    <h5 id="calendarMonth" class="mb-0">
+                        Month Year
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        onclick="changeCalendarMonth(1)">
+                        ❯
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered text-center">
+
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="calendarDays">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="d-flex flex-wrap gap-3 mt-3">
+
+                <span>
+                    <span class="badge bg-primary">●</span>
+                    Project Start
+                </span>
+
+                <span>
+                    <span class="badge bg-danger">●</span>
+                    Deadline
+                </span>
+
+                <span>
+                    <span class="badge bg-success">●</span>
+                    Completed
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- PROJECT DETAILS DASHBOARD -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card text-center h-100">
+            <p class="text-muted mb-2">Completion Rate</p>
+            <h2 id="completionRate">0%</h2>
+            <small class="text-muted">
+                Projects completed
+            </small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card text-center h-100">
+            <p class="text-muted mb-2">High Priority</p>
+            <h2 id="highPriorityCount">0</h2>
+            <small class="text-muted">
+                High priority projects
+            </small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card text-center h-100">
+            <p class="text-muted mb-2">Average Progress</p>
+            <h2 id="dashboardAverageProgress">0%</h2>
+            <small class="text-muted">
+                Across all projects
+            </small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card text-center h-100">
+            <p class="text-muted mb-2">Overdue</p>
+            <h2 id="dashboardOverdue" class="text-danger">0</h2>
+            <small class="text-muted">
+                Uncompleted overdue projects
+            </small>
+        </div>
+    </div>
+
+</div>
+    <!-- =============================== -->
+<!-- PROJECT ANALYTICS -->
+<!-- =============================== -->
+
+<div class="row g-4 mt-4 mb-5">
+
+    <!-- Status Chart -->
+
+    <div class="col-lg-6">
+
+        <div class="stat-card">
+
+            <h4 class="mb-4">
+                📊 Project Status
+            </h4>
+
+            <div style="height: 300px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Priority Chart -->
+
+    <div class="col-lg-6">
+
+        <div class="stat-card">
+
+            <h4 class="mb-4">
+                🎯 Project Priority
+            </h4>
+
+            <div style="height: 300px;">
+                <canvas id="priorityChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =============================== -->
+<!-- PHASE 2 TASK ANALYTICS -->
+<!-- =============================== -->
+
+<div class="row g-4 mb-5">
+
+    <!-- PROJECT PROGRESS -->
+
+    <div class="col-lg-6">
+
+        <div class="stat-card">
+
+            <h4 class="mb-4">
+                📈 Project Progress
+            </h4>
+
+            <div style="height: 320px;">
+                <canvas id="projectProgressChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TASK STATUS -->
+
+    <div class="col-lg-6">
+
+        <div class="stat-card">
+
+            <h4 class="mb-4">
+                🍩 Task Status
+            </h4>
+
+            <div style="height: 320px;">
+                <canvas id="taskStatusChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================== -->
+<!-- TASK PRIORITY -->
+<!-- =============================== -->
+
+<div class="row g-4 mb-5">
+
+    <div class="col-lg-6">
+
+        <div class="stat-card">
+
+            <h4 class="mb-4">
+                🎯 Task Priority Distribution
+            </h4>
+
+            <div style="height: 320px;">
+                <canvas id="taskPriorityChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TASK SUMMARY -->
+
+    <div class="col-lg-6">
+
+        <div class="stat-card h-100">
+
+            <h4 class="mb-4">
+                📋 Task Summary
+            </h4>
+
+            <div class="row g-3">
+
+                <div class="col-6">
+
+                    <div class="border rounded p-3">
+
+                        <small class="text-muted">
+                            Todo
+                        </small>
+
+                        <h3 id="dashboardTodoTasks">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6">
+
+                    <div class="border rounded p-3">
+
+                        <small class="text-muted">
+                            In Progress
+                        </small>
+
+                        <h3 id="dashboardInProgressTasks">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6">
+
+                    <div class="border rounded p-3">
+
+                        <small class="text-muted">
+                            High Priority
+                        </small>
+
+                        <h3 id="dashboardHighPriorityTasks">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6">
+
+                    <div class="border rounded p-3">
+
+                        <small class="text-muted">
+                            Overdue
+                        </small>
+
+                        <h3
+                            id="dashboardOverdueTasks"
+                            class="text-danger">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =============================== -->
+<!-- PROJECT SUMMARY -->
+<!-- =============================== -->
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-6">
+
+        <div class="stat-card">
+
+            <p class="text-muted mb-2">
+                Average Progress
+            </p>
+
+            <h2 id="averageProgress">
+                0%
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="stat-card">
+
+            <p class="text-muted mb-2">
+                Overdue Projects
+            </p>
+
+            <h2
+                id="overdueProjects"
+                class="text-danger"
+            >
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- Add/Edit Project Modal -->
+
+<div
+    class="modal fade"
+    id="projectModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="modalTitle"
+                >
+                    Add Project
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <form id="projectForm">
+
+                <div class="modal-body">
+
+                    <input
+                        type="hidden"
+                        id="projectId"
+                    >
+
+
+                    <!-- Project Name -->
+
+                    <div class="mb-3">
+
+                        <label
+                            class="form-label"
+                            for="projectName"
+                        >
+                            Project Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="projectName"
+                            class="form-control"
+                            placeholder="Enter project name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- Status -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                class="form-label"
+                                for="projectStatus"
+                            >
+                                Status
+                            </label>
+
+                            <select
+                                id="projectStatus"
+                                class="form-select"
+                            >
+
+                                <option value="In Progress">
+                                    In Progress
+                                </option>
+
+                                <option value="Pending">
+                                    Pending
+                                </option>
+
+                                <option value="Completed">
+                                    Completed
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Priority -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                class="form-label"
+                                for="projectPriority"
+                            >
+                                Priority
+                            </label>
+
+                            <select
+                                id="projectPriority"
+                                class="form-select"
+                            >
+
+                                <option value="High">
+                                    High
+                                </option>
+
+                                <option value="Medium" selected>
+                                    Medium
+                                </option>
+
+                                <option value="Low">
+                                    Low
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- Start Date -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                class="form-label"
+                                for="projectStartDate"
+                            >
+                                Start Date
+                            </label>
+
+                            <input
+    type="date"
+    id="projectStartDate"
+    class="form-control"
+>
+
+                        </div>
+
+
+                        <!-- Deadline -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                class="form-label"
+                                for="projectDeadline"
+                            >
+                                Deadline
+                            </label>
+
+                            <input
+    type="date"
+    id="projectDeadline"
+    class="form-control"
+>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Progress -->
+
+                    <div class="mb-3">
+
+                        <label
+                            class="form-label"
+                            for="projectProgress"
+                        >
+                            Progress: <strong id="progressValue">0%</strong>
+                        </label>
+
+                        <input
+                            type="range"
+                            id="projectProgress"
+                            class="form-range"
+                            min="0"
+                            max="100"
+                            value="0"
+                        >
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="mb-3">
+
+                        <label
+                            class="form-label"
+                            for="projectDescription"
+                        >
+                            Description
+                        </label>
+
+                        <textarea
+                            id="projectDescription"
+                            class="form-control"
+                            rows="4"
+                            placeholder="Enter project description"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Project
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- PROFILE MODAL -->
+<div
+    class="modal fade"
+    id="profileModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    👤 My Profile
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="text-center mb-4">
+
+                    <div
+                        class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"
+                        style="width: 80px; height: 80px; font-size: 32px;">
+                        👤
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="profileName"
+                        class="form-control"
+                        readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="profileEmail"
+                        class="form-control"
+                        readonly>
+                </div>
+
+                <div class="alert alert-info mb-0">
+                    🔐 Your account is protected using
+                    authentication.
+                </div>
+                <hr class="my-4">
+
+<h6 class="mb-3">🔐 Change Password</h6>
+
+<form id="changePasswordForm">
+
+    <div class="mb-3">
+        <label class="form-label">
+            Current Password
+        </label>
+
+        <input
+            type="password"
+            id="currentPassword"
+            class="form-control"
+            placeholder="Enter current password"
+            required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">
+            New Password
+        </label>
+
+        <input
+            type="password"
+            id="newPassword"
+            class="form-control"
+            placeholder="Enter new password"
+            minlength="6"
+            required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">
+            Confirm New Password
+        </label>
+
+        <input
+            type="password"
+            id="confirmPassword"
+            class="form-control"
+            placeholder="Confirm new password"
+            minlength="6"
+            required>
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-primary w-100">
+        🔐 Update Password
+    </button>
+
+</form>
+
+<div id="passwordMessage" class="mt-3"></div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Close
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="logout()">
+                    🚪 Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="./script.js?v=4"></script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+body {
+    background: #f5f7fb;
+    font-family: Arial, sans-serif;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card h6 {
+    color: #6c757d;
+}
+
+.stat-card h2 {
+    margin-top: 10px;
+}
+
+.project-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}

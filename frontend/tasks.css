@@ -1,0 +1,235 @@
+/* ======================================================
+   TASK MANAGEMENT
+   ====================================================== */
+
+body {
+    background-color: #f5f7fb;
+}
+
+
+/* ======================================================
+   NAVBAR
+   ====================================================== */
+
+.navbar-brand {
+    letter-spacing: 0.3px;
+}
+
+
+/* ======================================================
+   STATISTICS CARDS
+   ====================================================== */
+
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background-color: #e9f2ff;
+
+    color: #0d6efd;
+
+    font-size: 22px;
+}
+
+
+/* ======================================================
+   CARDS
+   ====================================================== */
+
+.card {
+    border-radius: 12px;
+}
+
+.card-header {
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+
+/* ======================================================
+   TABLE
+   ====================================================== */
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    font-size: 13px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+
+    color: #6c757d;
+
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+
+/* ======================================================
+   TASK DESCRIPTION
+   ====================================================== */
+
+.task-description {
+    display: block;
+
+    max-width: 280px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+/* ======================================================
+   BADGES
+   ====================================================== */
+
+.badge {
+    font-weight: 500;
+
+    padding: 6px 9px;
+
+    border-radius: 6px;
+}
+
+
+/* ======================================================
+   BUTTONS
+   ====================================================== */
+
+.btn {
+    border-radius: 7px;
+}
+
+.btn-sm {
+    min-width: 34px;
+}
+
+
+/* ======================================================
+   FORM CONTROLS
+   ====================================================== */
+
+.form-control,
+.form-select {
+    border-radius: 7px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 0.2rem
+        rgba(13, 110, 253, 0.15);
+}
+
+
+/* ======================================================
+   MODAL
+   ====================================================== */
+
+.modal-content {
+    border: none;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 15px 50px
+        rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-bottom: 1px solid #eee;
+}
+
+.modal-footer {
+    border-top: 1px solid #eee;
+}
+
+
+/* ======================================================
+   EMPTY STATE
+   ====================================================== */
+
+.empty-state {
+    padding: 20px;
+}
+
+
+/* ======================================================
+   RESPONSIVE
+   ====================================================== */
+
+@media (max-width: 768px) {
+
+    .container-fluid {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .d-flex.justify-content-between {
+        gap: 15px;
+    }
+
+    .table {
+        min-width: 850px;
+    }
+
+    .task-description {
+        max-width: 180px;
+    }
+}
+
+
+/* ======================================================
+   MOBILE HEADER
+   ====================================================== */
+
+@media (max-width: 576px) {
+
+    .navbar-brand {
+        font-size: 16px;
+    }
+
+    .navbar .btn {
+        font-size: 12px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    .stat-card {
+        margin-bottom: 5px;
+    }
+}
